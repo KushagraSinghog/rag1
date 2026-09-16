@@ -1,4 +1,4 @@
-                                                                 Hybrid RAG Assistant for Technical Book Question Answering
+                         Hybrid RAG Assistant for Technical Book Question Answering
 
 ## Overview:
 
