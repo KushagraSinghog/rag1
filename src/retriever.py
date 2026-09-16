@@ -3,7 +3,15 @@
 import pickle 
 from langchain_community.retrievers import BM25Retriever 
 
-CHUNKS_PATH = "vectorstore/chunks.pkl"
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+VECTORSTORE_DIR = BASE_DIR / "vectorstore"
+if not VECTORSTORE_DIR.exists():
+    VECTORSTORE_DIR = BASE_DIR.parent / "vectorstore"
+
+CHUNKS_PATH = str(VECTORSTORE_DIR / "chunks.pkl")
+VECTORSTORE_PATH = str(VECTORSTORE_DIR)
 
 with open(CHUNKS_PATH, "rb") as f: 
     documents = pickle.load(f) 
@@ -18,8 +26,6 @@ bm25_retriever.k = 5
 
 from langchain_community.vectorstores import FAISS 
 from langchain_ollama import OllamaEmbeddings 
-
-VECTORSTORE_PATH = "vectorstore" 
 
 def retrieve_context(): 
     embeddings = OllamaEmbeddings(model="nomic-embed-text") 
