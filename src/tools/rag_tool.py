@@ -1,7 +1,7 @@
 import json 
 
 from langchain_core.tools import tool 
-from src.rag_chain import answer_question
+from rag_chain import answer_question
 
 @tool 
 def book_search(query: str) -> str: 
