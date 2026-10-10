@@ -35,7 +35,7 @@ def retrieve_context():
                     ) 
     
     faiss_retriever = vectorstore.as_retriever(
-                        search_type = "mmr", search_kwargs = {"k": 5, "fetch_k": 20} 
+                        search_type = "mmr", search_kwargs = {"k": 15, "fetch_k": 30} 
                     ) 
     
     return faiss_retriever 

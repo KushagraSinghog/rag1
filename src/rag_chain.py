@@ -2,6 +2,8 @@
 
 from langchain_core.prompts import ChatPromptTemplate 
 
+
+
 prompt = ChatPromptTemplate.from_template(
     """ 
 You are answering questions about a machine learning book.
@@ -25,6 +27,8 @@ Answer:
 
 ### LLM 
 
+
+
 from langchain_ollama import ChatOllama 
 
 llm = ChatOllama(
@@ -36,6 +40,9 @@ llm = ChatOllama(
 ### Build chain 
 import time
 from retriever import retriever
+from reranker import rerank_docs
+
+
 
 def format_docs(docs): 
     return "\n\n".join(doc.page_content for doc in docs) 
@@ -46,7 +53,12 @@ def answer_question(question: str, top_k: int = 5):
     start_time = time.time()
     
     docs = retriever.invoke(question) 
-    context = format_docs(docs[:top_k] if top_k else docs) 
+
+    docs = rerank_docs( 
+        question, docs, top_n=5
+    )
+
+    context = format_docs(docs) 
 
     response = chain.invoke({ 
         "context": context, 
