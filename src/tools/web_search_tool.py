@@ -38,6 +38,14 @@ def web_search(query: str, max_results: int=5) -> str:
             for item in results
         ] 
 
+        return json.dumps(
+            {
+                "query": query, 
+                "results": cleaned_results,
+            }, 
+            ensure_ascii=False
+        )
+
     except Exception as exc: 
         return json.dumps(
             {
