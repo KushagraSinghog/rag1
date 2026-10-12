@@ -56,7 +56,7 @@ def answer_question(question: str, top_k: int = 5):
 
     docs = rerank_docs( 
         question, docs, top_n=5
-    )
+    ) 
 
     context = format_docs(docs) 
 

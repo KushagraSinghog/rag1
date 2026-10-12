@@ -20,4 +20,4 @@ def rerank_docs(query, documents, top_n=5):
         zip(documents, scores), key= lambda x: x[1], reverse=True
     ) 
 
-    return docs_ranked[:top_n]
+    return [doc for doc, score in docs_ranked[:top_n]]

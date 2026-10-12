@@ -15,10 +15,12 @@ def main():
 
     web_results = web_search.invoke(
         {
-            "query": "what are the recent developments in agentic ai", 
+            "query": "what is agentic ai", 
             "max_results": 5,
         }
     ) 
 
     print(web_results) 
-    
+
+if __name__ == "__main__":
+    main()
