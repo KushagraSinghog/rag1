@@ -34,10 +34,10 @@ SYNTHESIS_PROMPT = """
 
     Rules: 
         1. Use only the tools available to you to answer user query. 
-        2. If the user query cannot by answered by the provided tools, respond with "Sorry, I cannot asnwer that query right now."
+        2. If the user query cannot by answered by the provided tools, respond with "Sorry, I cannot answer that query right now."
                 Do not invent/answer any information, citation and sources not provided by the tools.
         3. If the user query is not related to AI/ML, respond with "Sorry, but I can only answer queries related to AI/ML." 
-        4. For BookSearch route, use the book_search tool to asnwer the user's query and give a structured response. 
+        4. For BookSearch route, use the book_search tool to answer the user's query and give a structured response. 
         5. For WebSearch route, use web_search tool to answer the user's query and give a structured response. 
         6. For Both route, use both book_search and web_search tool to answer the user query and give a structured response. 
         7. Use the Greeting route to handle user greetings. 
