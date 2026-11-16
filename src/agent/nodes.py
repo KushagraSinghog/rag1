@@ -1,3 +1,7 @@
+#How to run: cd src 
+#            $env:USE_TF = "0" 
+#            python -m agent.nodes
+
 import json 
 import re 
 import time 
