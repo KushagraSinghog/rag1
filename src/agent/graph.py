@@ -8,7 +8,14 @@ from agent.state import AgentState
 from agent.nodes import route_query, greeting_node, book_node, web_node, both_node, synthesis_node
 
 def select_route(state: AgentState) -> str: 
-    return state.get("route", "book_search") 
+    valid_routes = { "greeting", "book_search", "web_search", "both" } 
+
+    route = state.get("route", "web_search") 
+
+    if route not in valid_routes: 
+        return "web_search" 
+
+    return route 
 
 builder = StateGraph(AgentState) 
 

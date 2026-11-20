@@ -3,19 +3,19 @@ ROUTER_PROMPT = """
 
     Choose exactly ONE route for the user's query from the following available options: 
 
-        1. "BookSearch" : Use the book_search tool for this route. This route answers the user's query about machine learning 
+        1. "book_search" : Use the book_search tool for this route. This route answers the user's query about machine learning 
                           concepts, explanations, and information that can be found in the book 
                           "Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow" . 
 
-        2. "WebSearch" : Use the web_search tool for this route. This route answers the recent news and developments related to 
+        2. "web_search" : Use the web_search tool for this route. This route answers the recent news and developments related to 
                          the field of AI/ML along with any information that the book_search tool cannot provide. 
 
-        3. "Both" : Use both book_search and web_search tools for this route when the user asks for it. This route answers the
+        3. "both" : Use both book_search and web_search tools for this route when the user asks for it. This route answers the
                     user's query by using information from both the tools. This route can also be used if the book_search 
                     tool cannot provide adequate responses/sources for the user query and needs web search to provide a 
                     complete answer. 
 
-        4. "Greeting" : Use this route to handle greetings and simple conversations that do not require any research. 
+        4. "greeting" : Use this route to handle greetings and simple conversations that do not require any research. 
 
     
     Return only one word: 

@@ -26,7 +26,7 @@ def content_to_text(value) -> str:
         return value 
 
     if isinstance(value, (dict, list)): 
-        return json.dumps(value, ensure_asicii = False, default = str) 
+        return json.dumps(value, ensure_ascii = False, default = str) 
 
     return str(value) 
 
@@ -64,7 +64,7 @@ def route_query(state: AgentState) -> dict:
     if normalized in greetings: 
         return { 
             "route": "greeting", 
-            "routing reason": "Simple greeting/message"
+            "routing_reason": "Simple greeting/message"
         } 
 
     response = llm.invoke(
@@ -73,18 +73,21 @@ def route_query(state: AgentState) -> dict:
 
     raw_route = str(response.content).strip().lower() 
 
-    match = re.search(r"\b(booksearch|websearch|both|greeting)\b", raw_route) 
+    route_mapping = {
+        "booksearch": "book_search", 
+        "websearch": "web_search", 
+        "book_search": "book_search", 
+        "web_search": "web_search", 
+        "both": "both", 
+        "greeting": "greeting"
+    } 
 
-    if match: 
-        route = match.group(1) 
-
-    else: 
-        route = "websearch" 
+    route = route_mapping.get(raw_route, "book_search") 
 
     return {
         "route": route, 
-        "routing_reason": raw_route
-    } 
+        "routing_reason": str(response.content).strip() 
+    }
 
 def greeting_node(state: AgentState) -> dict: 
     """
@@ -144,7 +147,7 @@ def web_node(state: AgentState) -> dict:
     result = web_search.invoke(
         {
             "query": state["query"], 
-            "max_reuslts": 5, 
+            "max_results": 5, 
         }
     ) 
 
