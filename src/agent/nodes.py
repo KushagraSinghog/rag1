@@ -7,9 +7,10 @@ import re
 import time 
 
 from langchain_ollama import ChatOllama 
+from langchain_core.messages import HumanMessage, AIMessage 
 
 from agent.state import AgentState 
-from agent.prompt import ROUTER_PROMPT, SYNTHESIS_PROMPT 
+from agent.prompt import ROUTER_PROMPT, SYNTHESIS_PROMPT, CONTEXTUALIZER_PROMPT 
 from tools.rag_tool import book_search 
 from tools.web_search_tool import web_search
 
@@ -46,12 +47,58 @@ def parse_json(value: str) -> dict:
 
     return {} 
 
+def contextualize_query(state: AgentState) -> dict: 
+    """
+        Rewrites the follow up queries into a standalone query using the conversation history.
+    """ 
+
+    query = state["query"].strip() 
+
+    messages = state.get("messages", []) 
+    previous_messages = messages[:-1] 
+
+    if not previous_messages: 
+        return {
+            "search_query": query 
+        }  
+
+    history = [] 
+
+    for msg in previous_messages: 
+        if isinstance(msg ,HumanMessage): 
+            role = "user" 
+        elif isinstance(msg, AIMessage): 
+            role = "assistant" 
+        else: 
+            continue 
+
+        content = msg.content 
+
+        if isinstance(content, str): 
+            history.append( f" {role}: {content}")  
+
+    history_text = "\n".join(history) 
+
+    response = llm.invoke(
+        CONTEXTUALIZER_PROMPT.format(history = history_text, query = query) 
+    ) 
+
+    contextualized_query = str(response.content).strip() 
+    contextualized_query = contextualized_query.strip('"').strip("'") 
+
+    if not contextualized_query: 
+        contextualized_query = query 
+
+    return {
+        "search_query": contextualized_query 
+    }
+
 def route_query(state: AgentState) -> dict: 
     """ 
     chooses which route the query goes to
     """ 
 
-    query = state["query"].strip() 
+    query = state.get("search_query", state["query"]).strip()  
 
     normalized = re.sub(r"[!.,?]+$", "", query.lower()).strip() 
 
@@ -121,7 +168,7 @@ def book_node(state: AgentState) -> dict:
 
     result = book_search.invoke(
         {
-            "query": state["query"]
+            "query": state.get("search_query", state["query"])
         }
     ) 
 
@@ -146,7 +193,7 @@ def web_node(state: AgentState) -> dict:
 
     result = web_search.invoke(
         {
-            "query": state["query"], 
+            "query": state.get("search_query", state["query"]),  
             "max_results": 5, 
         }
     ) 

@@ -50,4 +50,26 @@ SYNTHESIS_PROMPT = """
     WebSearch Result: {web_result} 
 
     Final Answer: 
+""" 
+
+
+
+CONTEXTUALIZER_PROMPT = """
+    Role: You are a query contextualization assistant. 
+
+    Instructions: your task is to rewrite the latest user query into a standalone, self contained query using the 
+    conversation history when necessary. 
+
+    Rules: 
+        1. Resolve pronouns and references like "it", "that", "this", "previous one", "they" and "these". 
+        2. Preserve the users original intent. 
+        3. Do not add any information which is not supported by the conversation. 
+        4, If the latest query is already self contained, return it unchanged. 
+        5. Return ONLY the rewritten query.  
+
+    Conversation history: {messages} 
+
+    Latest user query: {query} 
+
+    Standalone query:  
 """
